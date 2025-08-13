@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/terusrag/db" VERSION="20250312" COMMENT="XMLDB file for Moodle blocks/terusrag"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="block_terusrag" COMMENT="Table to store RAG content and embeddings for Moodle context">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
+        <FIELD NAME="contenthash" TYPE="char" LENGTH="64" NOTNULL="true" SEQUENCE="false" COMMENT="SHA1 hash of the content for uniqueness"/>
+        <FIELD NAME="content" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="The actual text content chunk"/>
+        <FIELD NAME="embedding" TYPE="blob" NOTNULL="true" SEQUENCE="false" COMMENT="Serialized embedding vector"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0"/>
+        <FIELD NAME="moduletype" TYPE="char" LENGTH="50" NOTNULL="true" DEFAULT="course" COMMENT="Type of Moodle module (e.g., course, forum, page)"/>
+        <FIELD NAME="moduleid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" COMMENT="Moodle course or activity ID (e.g., course ID)"/>
+        <FIELD NAME="title" TYPE="char" LENGTH="255" NOTNULL="true" COMMENT="Title of the content source"/>
+        <FIELD NAME="contenttype" TYPE="char" LENGTH="50" NOTNULL="true" DEFAULT="course_summary" COMMENT="Type of content (e.g., course_summary, forum_post, page_content)"/>
+        <FIELD NAME="activityid" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" COMMENT="Specific course module ID (cmid) if contenttype is an activity"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="contenthash_moduleid_contenttype" TYPE="unique" FIELDS="contenthash,moduleid,contenttype"/>
+      </KEYS>
+      <INDEXES>
+          <INDEX NAME="moduleid_idx" FIELDS="moduleid"/>
+          <INDEX NAME="contenttype_idx" FIELDS="contenttype"/>
+          <INDEX NAME="activityid_idx" FIELDS="activityid"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
